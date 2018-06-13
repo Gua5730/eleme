@@ -1,29 +1,64 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <my-header :seller="seller"></my-header>
+    <div class="tab">
+      <div class="tab-item">
+        <router-link to="/goods">商品</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="rating">评价</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="seller">商家</router-link>
+      </div>
     </div>
     <router-view/>
   </div>
 </template>
 
+<script>
+  // 导入头部
+  import MyHeader from "./components/header/myHeader"
+  export default {
+      components: {
+          MyHeader,
+      },
+      data() {
+        return {
+            seller: {}
+        }
+      },
+      created() {
+          this.$http.get("/api/data/seller").then(({data})=>{//数据初始化过程 此时进行数据请求
+              console.log("data:",data)
+              this.seller = data.sellers;
+              console.log("created:",this.seller);
+
+          }).catch((err)=>{
+              console.log("err:",err);
+          })
+      },
+  }
+</script>
 <style lang="less">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+  @base-color:rgba(7,17,21,0.1);
+  .tab{
+    display: flex;
+    height: 40px;
+    border-bottom: 1px solid @base-color;
+    .tab-item{
+      flex: 1;
+      align-items: center;
+      a{
+        display: block;
+        text-align: center;
+        line-height: 40px;
+        font-size: 14px;
+        &.router-link-active{
+            color: rgb(240,20,20);
+        }
+
+      }
     }
   }
-}
 </style>

@@ -1,13 +1,13 @@
 <template>
     <div>
-        评价组件
+        商家组件
     </div>
 
 </template>
 
 <script>
     export default {
-        name: "rating"
+        name: "seller"
     }
 </script>
 

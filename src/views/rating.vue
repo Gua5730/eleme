@@ -1,5 +1,8 @@
 <template>
-    $END$
+    <div>
+        评价组件
+    </div>
+
 </template>
 
 <script>

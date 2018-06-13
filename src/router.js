@@ -1,21 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import About from './views/About.vue'
+import Goods from "./views/goods"
+import Rating from "./views/rating"
+import Seller from "./views/seller"
 
 Vue.use(Router)
 
 export default new Router({
+    mode : "history",
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
+      path: '/goods',
+      component:Goods,
+        // 为path取一个别名
+      alias: "/"
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
-    }
+      path: '/rating',
+        name: "rating",
+        component:Rating
+    },
+      {
+        path:'/seller',
+        name:"seller",
+        component:Seller
+      }
   ]
 })
