@@ -3,7 +3,7 @@
         <!-- 左侧分类 -->
         <div class="menu-wrapper" ref="menuWrapper">
             <ul>
-                <li class="menu-item" v-for="item in goods">
+                <li class="menu-item" @click="selectMenu($index,$event)" v-for="(item,$index) in goods" :class="{'current':currentIndex==$index}">
                     <span class="text">
                         <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
                     </span>
@@ -59,11 +59,14 @@
             }
         },
         computed: {
-            currenIndex() {
+            currentIndex() {
                 for (let i=0;i<this.listHeight.length; i++) {
+                    // 获取当前索引值得高度
                     let height1 = this.listHeight[i];
+                    // 获得下一个索引值得高度
                     let height2 = this.listHeight[i+1];
-                    if (!height2 || (this.scrollY>height1 && this.scrollY < height2)) {
+                    // 落到当前高度区间
+                    if (!height2 || (this.scrollY>=height1 && this.scrollY < height2)) {
                         return i;
                     }
                 }
@@ -88,17 +91,33 @@
             })
         },
         methods: {
+            // 点击右侧选取跳转对应的商品 index代表选择第几个的下标值
+            selectMenu(index, event) {
+                // better-scroll 开发时事件是  better-scroll设为true 这里 不执行
+                if (!event._constructed) {
+                    return;
+                }
+                // 点击滚动到到对应位置
+                let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+                let el = foodList[index]; // 对应的列表
+                this.foodsScroll.scrollToElement(el, 300); //滚动时间300ms
+                console.log("clickindex",index);
+            },
             _initScroll() {
                 // BScroll( DOM对象, options )
-                this.menuScroll = new BScroll(this.$refs.menuWrapper, {});
+                this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+                    // better-scroll会监听事件,阻止默认的事件  所以初始化时 需要传入一个 click 属性
+                    // PC端不需要传入
+                    click:true
+                });
 
                 this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
                     probeType: 3
                 });
 
-                //
                 this.foodsScroll.on('scroll', (pos) => { // pos 位置
                     this.scrollY = Math.abs(Math.round(pos.y));
+                    // console.log("scrolly",this.scrollY);
 
                 })
             },
@@ -142,6 +161,17 @@
                 width: 56px;
                 line-height: 14px;
                 padding: 0 12px;
+                &.current{
+                    position: relative;
+                    z-index: 10;
+                    margin-top: -1px;
+                    background: white;
+                    font-weight: 700;
+                    color: black;
+                    .text{
+                        border: none;
+                    }
+                }
                 .icon {
                     display: inline-block;
                     vertical-align: top;
