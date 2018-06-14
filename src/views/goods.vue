@@ -37,11 +37,13 @@
                 </li>
             </ul>
         </div>
+        <shopcart></shopcart>
     </div>
 </template>
 
 <script>
     import BScroll from 'better-scroll'
+    import shopcart from "../components/shopcart/shopCart"
 
     export default {
         name: "goods",
@@ -57,6 +59,9 @@
                 listHeight: [],
                 scrollY: 0,
             }
+        },
+        components: {
+            shopcart
         },
         computed: {
             currentIndex() {
